@@ -18,9 +18,9 @@ public class MonoExample03 {
 
   public static void main(String[] args) {
     URI worldTimeUri = UriComponentsBuilder.newInstance().scheme("https")
-        .host("worldtimeapi.org")
+        .host("jsonplaceholder.typicode.com")
         .port(443)
-        .path("/api/timezone/Asia/Seoul")
+        .path("/todos/1")
         .build()
         .encode()
         .toUri();
@@ -35,7 +35,7 @@ public class MonoExample03 {
         .map(response -> {
           String body = response.getBody();
           Map<String, Object> stringObjectMap = JsonParserFactory.getJsonParser().parseMap(body);
-          return stringObjectMap.get("datetime");
+          return stringObjectMap.get("title");
         })
         .subscribe(
             data -> log.info("# emitted date: {}", data),
