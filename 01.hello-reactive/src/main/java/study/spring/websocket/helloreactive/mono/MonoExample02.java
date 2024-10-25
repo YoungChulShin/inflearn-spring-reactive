@@ -1,4 +1,4 @@
-package study.spring.websocket.helloreactive;
+package study.spring.websocket.helloreactive.mono;
 
 
 import lombok.extern.slf4j.Slf4j;

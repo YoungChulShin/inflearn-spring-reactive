@@ -1,6 +1,5 @@
-package study.spring.websocket.helloreactive;
+package study.spring.websocket.helloreactive.mono;
 
-import org.slf4j.Logger;
 import reactor.core.publisher.Mono;
 
 public class MonoExample01 {

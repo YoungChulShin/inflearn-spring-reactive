@@ -1,7 +1,6 @@
-package study.spring.websocket.helloreactive;
+package study.spring.websocket.helloreactive.sequence;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;

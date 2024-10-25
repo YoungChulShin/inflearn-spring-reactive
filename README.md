@@ -60,3 +60,10 @@ hot sequence
       - 버퍼가 다 차고 1이 들어오면 1은 남아있는다. 이후에 2가 들어오면 1이 drop되고 2가 남게 된다. 
    5. buffer-drop-latest: 버퍼가 가득차면 최근에 버퍼로 들어온 데이터를 drop한다. 
    6. buffer-drop-olest: 버퍼가 가득차면 처음 들어온 데이터를 drop한다. 
+
+## Sinks
+개념
+- Reactive Stream에서 발생하는 signal을 프로그래밍 적으로 push 할 수 있는 기능을 가지는 publisher의 일종이다. 
+- Thread-safe 하지 않을 수 있는 processor보다 더 나은 대안이 된다. 
+   - 기존의 processor는 onNext, onComplete같은 signal을 직접 처리하고 있기 때문
+- Thread-safe하게 signal을 발생시킨다. 

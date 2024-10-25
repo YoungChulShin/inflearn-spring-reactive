@@ -1,4 +1,4 @@
-package study.spring.websocket.helloreactive;
+package study.spring.websocket.helloreactive.mono;
 
 import java.net.URI;
 import java.util.Collections;
