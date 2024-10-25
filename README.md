@@ -67,3 +67,39 @@ hot sequence
 - Thread-safe 하지 않을 수 있는 processor보다 더 나은 대안이 된다. 
    - 기존의 processor는 onNext, onComplete같은 signal을 직접 처리하고 있기 때문
 - Thread-safe하게 signal을 발생시킨다. 
+
+종류
+- SinkOne
+   - 1개의 데이터만 전달할 수 있는 producer. Mono와 같은 개념. 
+   - 2개를 emit하면 예외가 발생한다. 
+   - 예제
+      ```java
+      One<String> sinkOne = Sinks.one();
+      Mono<String> mono = sinkOne.asMono();
+
+      sinkOne.emitValue("Hello Reactor", EmitFailureHandler.FAIL_FAST);
+      ```
+- SinkMany
+   - 여러 데이터를 emit 할 수 있는 producer. Flux와 같은 개념. 
+   - 전략
+      - unicast: 1개의 subscriber만 가질 수 있다. 2개 이상 subscriber가 추가되면 에러가 발생한다. 
+         ```java
+         Many<Integer> unicastSink = Sinks.many().unicast().onBackpressureBuffer();
+         Flux<Integer> fluxView = unicastSink.asFlux();
+         ```
+      - multicast: 2개 이상의 subscriber를 가질 수 있다. `hot sequence` 방식으로 동작한다. 
+         ```java
+         Many<Integer> unicastSink = Sinks.many().multicast().onBackpressureBuffer();
+         Flux<Integer> fluxView = unicastSink.asFlux();
+         ```
+      - replay: 이전 데이터를 가져올 수 있는 옵션을 제공한다. 
+         - limit(n): subscriber 시점에 최근 n개 만큼의 데이터를 가져온다.
+           ```java
+           Many<Integer> unicastSink = Sinks.many().replay().limit(2);
+           Flux<Integer> fluxView = unicastSink.asFlux();
+           ```
+         - all(): 전체 데이터를 가져온다. 
+           ```java
+           Many<Integer> unicastSink = Sinks.many().replay().all();
+           Flux<Integer> fluxView = unicastSink.asFlux();
+           ```
