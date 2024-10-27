@@ -103,3 +103,51 @@ hot sequence
            Many<Integer> unicastSink = Sinks.many().replay().all();
            Flux<Integer> fluxView = unicastSink.asFlux();
            ```
+
+## Scheduler
+종류
+- publishOn(): Operator 체인에서 DownstreamOperator의 실행을 위한 스레드를 지정한다. 
+- subscribeOn(): 최 상위 Upstream Publisher의 실행을 위한 스레드를 지정한다. 원본 데이터 소스 emit을 하기 위한 스케줄러를 지정한다. 
+- parallel(): Downstream에 대한 데이터 처리를 병렬로 분할 처리하기 위한 스레드를 지정한다. 
+
+Parallel()
+- `parallel()`을 사용하면 `ParallelFlux`를 리턴한다. 
+- 이대로 사용하면 안되고, `runOn`과 함께 사용되어야 한다. 
+- 샘플
+   ```java
+   Flux.fromArray(new Integer[] {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23 ,25, 27, 29, 31})
+        .parallel(4) // 4개의 스레드를 사용하겠다.
+        .runOn(Schedulers.parallel())
+        .subscribe(data -> log.info("subscribe: {}", data));
+   ```
+
+동작 
+- Opeator 체인에서 최초의 스레드는 subscribe()가 호출되는 scope에 있는 스레드이다. 
+- publishOn()이 호출되면 publishOn() 호출 이후의 Operator 체인은 다음 publishOn()을 만나기까지 publishOn()에서 지정한 스레드에서 실행된다. 
+   - subscribe()도 같은 스레드에서 실행된다. 
+   - 예시
+      ```java
+      Flux.fromArray(new Integer[] {1, 3, 5, 7})
+         .doOnNext(data -> log.info("fromArray: {}", data))  // main thread
+         .publishOn(Schedulers.parallel())
+         .filter(data -> data > 3)
+         .doOnNext(data -> log.info("filter: {}", data))   // thread A
+         .publishOn(Schedulers.parallel())
+         .map(data -> data * 10)
+         .doOnNext(data -> log.info("map: {}", data))  // thread B
+         .subscribe(data -> log.info("Subscribe: {}", data));   // thread B
+      ```
+- subscribeOn()이 호출되면, emit하는 스레드가 별도의 스레드에서 실행된다. 그리고 publishOn()을 만나기 전까지는 새로운 스레드에서 실행된다. 
+   - subscribeOn()은 어디에 위치하던 최상의 업스트림 오퍼레이터의 스레드를 지정한다. 
+   - 예시
+      ```java
+       Flux.fromArray(new Integer[] {1, 3, 5, 7})
+        .subscribeOn(Schedulers.boundedElastic())
+        .doOnNext(data -> log.info("fromArray: {}", data))    // thread A
+        .filter(data -> data > 3)
+        .doOnNext(data -> log.info("filter: {}", data))    // thread A
+        .publishOn(Schedulers.parallel())
+        .map(data -> data * 10)
+        .doOnNext(data -> log.info("map: {}", data))    // thread B
+        .subscribe(data -> log.info("Subscribe: {}", data));     // thread B
+      ```
