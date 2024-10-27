@@ -151,3 +151,18 @@ Parallel()
         .doOnNext(data -> log.info("map: {}", data))    // thread B
         .subscribe(data -> log.info("Subscribe: {}", data));     // thread B
       ```
+
+스케줄러 종류
+- immediate(): 현재 스레드에서 실행한다. 
+- single(): 하나의 스레드를 재사용한다. 저지연(low latency) 일회성 실행에 최적화 되어 있다. 
+- boundedElastic(): 스레드풀을 생성하여 생성된 스레드를 재사용한다. 
+   - 생성할 수 있는 스레드 수의 제한이 있다. 기본: CPU core * 10
+   - 긴 실행시간을 가진 Blocking I/O 작업에 최적화 되어 있다.
+- parallel(): 여러 스레드를 할당해서 동시에 작업을 수행할 수 있다. 
+   - non-Blocking I/O 작업에 최적화 되어 있다. 
+   - CPU core 수 만큼 스레드를 생성한다. 
+- fromExecutorService(): 기존의 ExecutorService를 사용해서 처리한다. 
+   - Metric에서 주료 사용된다. 
+   - 추천하지는 않는다. 
+- newXXXX(): 새로운 스케줄러 인스턴스를 생성할 수 있다.
+   - 이름을 직접 지정할 수 있다. 
