@@ -166,3 +166,24 @@ Parallel()
    - 추천하지는 않는다. 
 - newXXXX(): 새로운 스케줄러 인스턴스를 생성할 수 있다.
    - 이름을 직접 지정할 수 있다. 
+
+## Context
+개념
+- sequence상에서 상태를 저장할 수 있고, 저장된 값을 operator 체인에서 공유할 수 있는 인터페이스.
+- key, value로 저장
+   - 저장: contextWrite()
+   - 읽어오기: ContextView
+- 실행 스레드가 달라도 context에 저장된 값은 가져올 수 있다. 
+
+예시
+```java
+String key = "message";
+
+Mono<String> mono = Mono.deferContextual(ctx ->
+            Mono.just("Hello " + ctx.get(key))
+                .doOnNext(data -> log.info("onNext: {}", data)))  // context 정보를 가져와서 emit
+        .subscribeOn(Schedulers.boundedElastic())
+        .publishOn(Schedulers.parallel()) // emit 스레드와 tranform 스레드가 다르다. 그래도 context를 같이 사용할 수 있다. 
+        .transformDeferredContextual((mono2, ctx) -> mono2.map(data -> data + " " + ctx.get(key)))
+        .contextWrite(context -> context.put(key, "Reactor")); // context 저장
+```
