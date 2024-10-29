@@ -192,3 +192,12 @@ Context API
 - put(key, value): 값을 context에 쓴다
 - Context.of(key1, value1, key2, value2..): 여러개의 key/value를 쓴다. 
 - putAll(ContextView): 파라미터로 입력된 ContextView를 merge한다. 
+- delete(key): 삭제한다. 
+
+ContextView API
+- get(key): key에 해당하는 value를 반환한다. 
+- getOrEmpty(key): key에 해당하는 데이터를 Optional로 반환한다. 
+- getOrDefault(key, default): key에 해당하는 값이 없으면 default value를 읽어온다. 
+- hasKey(key): 특정 key가 있는지 확인한다. 
+- isEmpty(): context가 비어있는지
+- size(): key/value 쌍의 개수를 반환한다. 
