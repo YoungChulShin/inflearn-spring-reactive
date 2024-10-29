@@ -187,3 +187,8 @@ Mono<String> mono = Mono.deferContextual(ctx ->
         .transformDeferredContextual((mono2, ctx) -> mono2.map(data -> data + " " + ctx.get(key)))
         .contextWrite(context -> context.put(key, "Reactor")); // context 저장
 ```
+
+Context API
+- put(key, value): 값을 context에 쓴다
+- Context.of(key1, value1, key2, value2..): 여러개의 key/value를 쓴다. 
+- putAll(ContextView): 파라미터로 입력된 ContextView를 merge한다. 
