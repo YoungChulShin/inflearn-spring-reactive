@@ -201,3 +201,7 @@ ContextView API
 - hasKey(key): 특정 key가 있는지 확인한다. 
 - isEmpty(): context가 비어있는지
 - size(): key/value 쌍의 개수를 반환한다. 
+
+특징
+- Subscriber를 통해서 Context는 연결된다. 그래서 Operator가 달라도 접근할 수 있다. 
+- 체인의 맨 아래(=Downstream)부터 위(=Upstream)로 전파된다. 그래서 Operator 체인의 제일 마지막에 둔다. 
