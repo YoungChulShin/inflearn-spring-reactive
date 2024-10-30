@@ -213,7 +213,7 @@ ContextView API
 3. log() Operator를 사용
 
 용어
-- stacktface
+- stacktrace
 - assembly: 새로운 flux가 선언된 지점
    - operator가 선언된 지점
 - traceback: 에러가 발생한 operator의 정보를 캡처한 정보 
@@ -227,3 +227,25 @@ ContextView API
    Error has been observed at the following site(s):
 	*__Flux.zipWith ⇢ at study.spring.websocket.helloreactive.debug.DebugExample02.main(DebugExample02.java:15) // traceback
    ```
+
+checkpoint() operator
+- 특정 operator 체인에서만 동작하기 때문에 디버그 모드에 비해서 가볍다. 
+- 에러가 발생한 부분에 체크포인트 정보가 나오기 때문에 어디서 에러가 발생했는지 파악해 나갈 수 있다. 
+   ```java
+   Flux.just(2, 4, 6, 8)
+        .zipWith(Flux.just(1, 2, 3, 0), (x, y) -> x / y)
+        .checkpoint()
+        .map(num -> num + 2)
+        .checkpoint()
+        .subscribe(
+            data -> log.info("subscribe: {}", data),
+            error -> log.error("error", error)
+        );
+
+   // zipWith에서 발생했기 때문에 2개의 checkpoint 정보가 모두 나온다. 
+   Error has been observed at the following site(s):
+	*__checkpoint() ⇢ at study.spring.websocket.helloreactive.debug.CheckpointExample03.main(CheckpointExample03.java:12)
+	|_ checkpoint() ⇢ at study.spring.websocket.helloreactive.debug.CheckpointExample03.main(CheckpointExample03.java:14)
+   ```
+- checkpoint(description)을 전달하면, assembly stacktrace를 생략하고 description을 통해서 에러 지점을 예상할 수 있다. 
+
