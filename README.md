@@ -205,3 +205,25 @@ ContextView API
 특징
 - Subscriber를 통해서 Context는 연결된다. 그래서 Operator가 달라도 접근할 수 있다. 
 - 체인의 맨 아래(=Downstream)부터 위(=Upstream)로 전파된다. 그래서 Operator 체인의 제일 마지막에 둔다. 
+
+## 디버깅
+방법
+1. Debug 모드를 활성화 (Global)
+2. checkpoint() Operator를 사용
+3. log() Operator를 사용
+
+용어
+- stacktface
+- assembly: 새로운 flux가 선언된 지점
+   - operator가 선언된 지점
+- traceback: 에러가 발생한 operator의 정보를 캡처한 정보 
+
+디버그 모드
+- Hooks.onOperatorDebug()를 통해서 활성화한다. 
+- Operator 체인에서 에러 발생 시, 에러가 발생한 Operator의 위치를 알려준다. 
+- 모든 Operator의 assembly를 캡쳐하기 때문에 비용이 많이 든다. 
+- 에러 발생 정보
+   ```
+   Error has been observed at the following site(s):
+	*__Flux.zipWith ⇢ at study.spring.websocket.helloreactive.debug.DebugExample02.main(DebugExample02.java:15) // traceback
+   ```
