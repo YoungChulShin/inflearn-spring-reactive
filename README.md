@@ -256,3 +256,6 @@ log() Operator
 - operator 뒤에 log를 정의해주면 event를 캡쳐해서 표시해준다. 
 - category를 추가하면 log의 이름을 조금 더 명확하게 해줄 수 있다. 
 - 에러 발생 시, stack trace를 출력해준다. 
+
+## 테스트
+### SteopVerifier
