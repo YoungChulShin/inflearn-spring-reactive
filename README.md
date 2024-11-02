@@ -249,3 +249,10 @@ checkpoint() operator
    ```
 - checkpoint(description)을 전달하면, assembly stacktrace를 생략하고 description을 통해서 에러 지점을 예상할 수 있다. 
 
+
+log() Operator
+- Flux 또는 Mono에서 발생하는 Signal Event를 출력해준다.
+   - onNext, onError, onComplete, subscriptions, cancellations, requests
+- operator 뒤에 log를 정의해주면 event를 캡쳐해서 표시해준다. 
+- category를 추가하면 log의 이름을 조금 더 명확하게 해줄 수 있다. 
+- 에러 발생 시, stack trace를 출력해준다. 
