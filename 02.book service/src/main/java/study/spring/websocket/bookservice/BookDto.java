@@ -1,0 +1,47 @@
+package study.spring.websocket.bookservice;
+
+import java.time.LocalDateTime;
+import lombok.Data;
+
+public class BookDto {
+
+  @Data
+  public static class Post {
+
+    private Long id;
+
+    private String name;
+
+    private String author;
+
+    private String isbn;
+
+    private String publishDate;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+  }
+
+  public static class Patch {
+
+  }
+
+  @Data
+  public static class Response {
+    private Long id;
+
+    private String name;
+
+    private String author;
+
+    private String isbn;
+
+    private String publishDate;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+  }
+
+}
