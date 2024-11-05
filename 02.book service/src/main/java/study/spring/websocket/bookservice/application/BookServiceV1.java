@@ -1,11 +1,12 @@
-package study.spring.websocket.bookservice;
+package study.spring.websocket.bookservice.application;
 
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import study.spring.websocket.bookservice.domain.Book;
 
 @Service
-public class BookService {
+public class BookServiceV1 {
 
   public Mono<Book> createBook(Book book) {
     return Mono.just(book);

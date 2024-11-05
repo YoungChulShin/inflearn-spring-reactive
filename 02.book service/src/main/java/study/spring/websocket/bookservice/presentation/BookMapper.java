@@ -1,7 +1,8 @@
-package study.spring.websocket.bookservice;
+package study.spring.websocket.bookservice.presentation;
 
 import org.mapstruct.Mapper;
 import reactor.core.publisher.Mono;
+import study.spring.websocket.bookservice.domain.Book;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {

@@ -1,4 +1,4 @@
-package study.spring.websocket.bookservice;
+package study.spring.websocket.bookservice.presentation;
 
 import java.time.LocalDateTime;
 import lombok.Data;
