@@ -12,47 +12,41 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import study.spring.websocket.bookservice.application.BookMapper;
-import study.spring.websocket.bookservice.domain.Book;
-import study.spring.websocket.bookservice.application.BookServiceV1;
+import study.spring.websocket.bookservice.application.BookServiceV2;
 import study.spring.websocket.bookservice.application.BookDto.Patch;
 import study.spring.websocket.bookservice.application.BookDto.Post;
 import study.spring.websocket.bookservice.application.BookDto.Response;
 
+/**
+ * V1에서 DtoMapping 간에 블로킹 요소를 제거
+ */
 @RestController
-@RequestMapping("/v1/books")
+@RequestMapping("/v2/books")
 @RequiredArgsConstructor
-public class BookControllerV1 {
+public class BookControllerV2 {
 
-  private final BookServiceV1 bookService;
+  private final BookServiceV2 bookService;
   private final BookMapper bookMapper;
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<Response> postBook(@RequestBody Post requestBody) {
-    Mono<Book> book = bookService.createBook(bookMapper.bookPostToBook(requestBody));
-
-    return bookMapper.bookToBookResponse(book);
+  public Mono<Response> postBook(@RequestBody Mono<Post> requestBody) {
+    return bookService.createBook(requestBody)
+        .flatMap(data -> Mono.just(bookMapper.bookToResponse(data)));
   }
 
   @PatchMapping("/{book-id}")
   public Mono<Response> patchBook(
       @PathVariable(value = "book-id") Long bookId,
-      @RequestBody Patch requestBody) {
-    requestBody.setId(bookId);
-    Mono<Book> book = bookService.updateBook(bookMapper.bookPatchToBook(requestBody));
-
-    return bookMapper.bookToBookResponse(book);
+      @RequestBody Mono<Patch> requestBody) {
+    return bookService.updateBook(bookId, requestBody)
+        .flatMap(data -> Mono.just(bookMapper.bookToResponse(data)));
   }
 
   @GetMapping("/{book-id}")
   public Mono<Response> getBook(@PathVariable(value = "book-id") Long bookId) {
-    Mono<Book> book = bookService.findBook(bookId);
-
-    return bookMapper.bookToBookResponse(book);
+    return bookService.findBook(bookId)
+        .flatMap(data -> Mono.just(bookMapper.bookToResponse(data)));
   }
-
-
-
-
 }
 
