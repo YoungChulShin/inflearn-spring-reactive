@@ -23,12 +23,27 @@ public class BookDto {
     private LocalDateTime updatedAt;
   }
 
+  @Data
   public static class Patch {
 
+    private Long id;
+
+    private String name;
+
+    private String author;
+
+    private String isbn;
+
+    private String publishDate;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
   }
 
   @Data
   public static class Response {
+
     private Long id;
 
     private String name;
