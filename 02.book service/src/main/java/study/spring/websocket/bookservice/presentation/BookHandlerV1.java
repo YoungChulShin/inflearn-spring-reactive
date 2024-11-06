@@ -18,9 +18,11 @@ import study.spring.websocket.bookservice.domain.Book;
 public class BookHandlerV1 {
 
   private final BookMapper bookMapper;
+  private final BookValidator bookValidator;
 
   public Mono<ServerResponse> createBook(ServerRequest request) {
     return request.bodyToMono(Post.class)
+        .doOnNext(post -> bookValidator.validate(post))
         .map(bookMapper::bookPostToBook)
         .flatMap(book ->
           ServerResponse
@@ -49,6 +51,7 @@ public class BookHandlerV1 {
     final long bookId = Long.parseLong(request.pathVariable("book-id"));
     return request
         .bodyToMono(Patch.class)
+        .doOnNext(patch -> bookValidator.validate(patch))
         .map(patch -> {
           patch.setId(bookId);
           return bookMapper.bookPatchToBook(patch);

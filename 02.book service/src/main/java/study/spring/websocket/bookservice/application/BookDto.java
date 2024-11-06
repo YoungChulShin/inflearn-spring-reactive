@@ -1,5 +1,7 @@
 package study.spring.websocket.bookservice.application;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -8,8 +10,10 @@ public class BookDto {
   @Data
   public static class Post {
 
+    @NotNull
     private Long id;
 
+    @NotEmpty
     private String name;
 
     private String author;
@@ -28,6 +32,7 @@ public class BookDto {
 
     private Long id;
 
+    @NotEmpty
     private String name;
 
     private String author;
