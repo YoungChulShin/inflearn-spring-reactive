@@ -1,5 +1,6 @@
 package study.spring.websocket.bookservice.application;
 
+import java.util.List;
 import org.mapstruct.Mapper;
 import reactor.core.publisher.Mono;
 import study.spring.websocket.bookservice.domain.Book;
@@ -15,6 +16,9 @@ public interface BookMapper {
   Book bookPatchToBook(Patch requestBody);
 
   Response bookToResponse(Book book);
+
+  List<Response> booksToResponse(List<Book> books);
+
 
   default Mono<Response> bookToBookResponse(Mono<Book> mono) {
     return mono.flatMap(book -> Mono.just(bookToResponse(book)));
